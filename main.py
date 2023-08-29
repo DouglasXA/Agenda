@@ -99,6 +99,7 @@ def main():
     st.dataframe(month_summary)
 
     # Mostrar atividades filtradas
+
     if not filtered_activities.empty:
         st.subheader("Atividades Previstas")
         for index, activity in filtered_activities.iterrows():
@@ -106,15 +107,19 @@ def main():
             st.write(f"**Tipo de Atividade:** {activity['activity_type']}")
             st.write(f"**Data e Hora da Atividade:** {activity['date']} {activity['time']}")
 
-            # Gerar uma chave única para cada caixa de seleção
+            # Usar o ID da atividade como parte do identificador do checkbox
             checkbox_key = f"checkbox_{activity['id']}"
+            selectbox_key = f"selectbox_{activity['id']}"
+            text_area_key = f"text_area_{activity['id']}"
+            delete_button_key = f"delete_button_{activity['id']}"
 
             if st.checkbox("Ver Detalhes", key=checkbox_key):
-                status = st.selectbox("Status da Atividade", ["Pendente", "Realizada", "Em Execução"])
-                notes = st.text_area("Descrição da atividade:")
+                status = st.selectbox("Status da Atividade", ["Pendente", "Realizada", "Em Execução"],
+                                      key=selectbox_key)
+                notes = st.text_area("Descrição da atividade:", key=text_area_key)
 
                 update_activity(activity['id'], status, notes)
-                delete_button = st.button("Excluir Atividade")
+                delete_button = st.button("Excluir Atividade", key=delete_button_key)
                 if delete_button:
                     delete_activity(activity['id'])
 
@@ -131,3 +136,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
